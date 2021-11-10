@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 
-#define WIDTH 11
-#define HEIGHT 11
+#define WIDTH 97
+#define HEIGHT 99
 
 
 typedef struct SEAT_MATRIX {
@@ -16,6 +16,7 @@ SEAT_MATRIX* initSeatMatrix(char *fname);
 void printSeatMatrix(SEAT_MATRIX *SM);
 int developSeatMatrix(SEAT_MATRIX *SM);
 int countAdjacentOccupied(SEAT_MATRIX *Mat, int row, int column);
+int countOccupiedSeats(SEAT_MATRIX *SM);
 
 
 int main(int argc, char *argv[])
@@ -38,40 +39,22 @@ int main(int argc, char *argv[])
 void day11Solve(char *fname)
 {
     SEAT_MATRIX *SM;
-    int developed;
+    int stabilized;
 
     SM = initSeatMatrix(fname);
     printSeatMatrix(SM);
-
-    developed = developSeatMatrix(SM);
     printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
 
-    developed = developSeatMatrix(SM);
-    printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
+    do
+    {
+        stabilized = developSeatMatrix(SM);
+        printSeatMatrix(SM);
+        printf("\n\n");
+    }
+    while (!stabilized);
 
-    developed = developSeatMatrix(SM);
-    printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
-
-    developed = developSeatMatrix(SM);
-    printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
-
-    developed = developSeatMatrix(SM);
-    printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
-
-    developed = developSeatMatrix(SM);
-    printf("\n\n");
-    printSeatMatrix(SM);
-    printf("Stabilized? %d\n", developed);
+    printf("Task a) %d will be occupied.\n", countOccupiedSeats(SM));
+    free(SM);
 }
 
 
@@ -106,13 +89,13 @@ int developSeatMatrix(SEAT_MATRIX *SM)
             {
                 adjacent_occupied_count = countAdjacentOccupied(snapshot, row, column);
 
-                if (!adjacent_occupied_count)
+                /* rule 1) */
+                if (!adjacent_occupied_count && SM->seat[row][column] != '#')
                 {
-                    /* rule 1) */
                     SM->seat[row][column] = '#';
                     stabilized = 0;
                 }
-                else if (adjacent_occupied_count >= 4)
+                else if (adjacent_occupied_count >= 4 && SM->seat[row][column] != 'L')
                 {
                     /* rule 2) */
                     SM->seat[row][column] = 'L';
@@ -124,6 +107,7 @@ int developSeatMatrix(SEAT_MATRIX *SM)
         }
     }
 
+    free(snapshot);
     return(stabilized);
 }
 
@@ -150,6 +134,19 @@ int countAdjacentOccupied(SEAT_MATRIX *Mat, int row, int column)
     return(result);
 }
 
+
+int countOccupiedSeats(SEAT_MATRIX *SM)
+{
+    int row, column, result;
+
+    result = 0;
+    for (row = 1; row < HEIGHT; row++)
+        for (column = 1; column < WIDTH; column++)
+            if (SM->seat[row][column] == '#')
+                result++;
+
+    return(result);
+}
 
 SEAT_MATRIX* initSeatMatrix(char *fname)
 {
