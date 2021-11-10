@@ -7,21 +7,21 @@ int getDataCount(char *fname, char seperator)
 	FILE *f;
 	int count;
 	char c;
-	
+
 	count = 0;
 	f = fopen(fname, "r");
-	
+
 	if (f)
 	{
 		while(!feof(f))
 		{
-			c = fgetc(f);
-			if (c == seperator) count++;
+            c = fgetc(f);
+            if (c == seperator) count++;
 		}
+        fclose(f);
 	}
 	else printf("ERROR: Could not open file '%s'\n", fname);
-	
-	fclose(f);
+
 	
 	return count;
 }

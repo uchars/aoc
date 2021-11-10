@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 		fname = (char*)malloc(sizeof(char) * strlen(argv[1]));
 		fname = argv[1];
 		day4Solve(fname);
-		free(fname);
 	}
 		
 	return(0);

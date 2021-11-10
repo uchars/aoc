@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 		day6solve(fname);
 	}
 	
-	printf("I survived!\n");
 	return(0);
 }
 
