@@ -42,14 +42,10 @@ void day11Solve(char *fname)
     int stabilized;
 
     SM = initSeatMatrix(fname);
-    printSeatMatrix(SM);
-    printf("\n\n");
 
     do
     {
         stabilized = developSeatMatrix(SM);
-        printSeatMatrix(SM);
-        printf("\n\n");
     }
     while (!stabilized);
 
