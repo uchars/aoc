@@ -3,3 +3,5 @@
 *.out
 *.txt
 test.c
+.idea/
+cmake-build-debug/
