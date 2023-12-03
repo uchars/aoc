@@ -45,18 +45,15 @@ fn solve() -> Result<(), Box<dyn std::error::Error>> {
     let mut sum: u32 = 0;
     let mut gr: u32 = 0;
     for sl in symbol_locations.iter() {
-        // sum above (duplicate numbers are not possible)
-        let mut above: Vec<u32> = vec![];
-        let mut below: Vec<u32> = vec![];
-        let mut same: Vec<u32> = vec![];
+        let mut last_num: u32 = 0;
         let mut prod: u32 = 1;
         let mut adj_count: u8 = 0;
 
         // above
         for c in -1..2 {
             if let Some(num) = num_hash.get(&(sl.0 - 1, sl.1 + c)) {
-                if !above.contains(&num) {
-                    above.push(*num);
+                if *num != last_num {
+                    last_num = *num;
                     sum += *num;
                     if sl.2 == '*' {
                         adj_count += 1;
@@ -67,10 +64,11 @@ fn solve() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         // below
+        last_num = 0;
         for c in -1..2 {
             if let Some(num) = num_hash.get(&(sl.0 + 1, sl.1 + c)) {
-                if !below.contains(&num) {
-                    below.push(*num);
+                if *num != last_num {
+                    last_num = *num;
                     sum += *num;
                     if sl.2 == '*' {
                         adj_count += 1;
@@ -82,7 +80,6 @@ fn solve() -> Result<(), Box<dyn std::error::Error>> {
 
         // same line
         if let Some(num) = num_hash.get(&(sl.0, sl.1 - 1)) {
-            same.push(*num);
             sum += *num;
             if sl.2 == '*' {
                 adj_count += 1;
@@ -90,12 +87,10 @@ fn solve() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         if let Some(num) = num_hash.get(&(sl.0, sl.1 + 1)) {
-            if !same.contains(&num) {
-                sum += *num;
-                if sl.2 == '*' {
-                    adj_count += 1;
-                    prod *= *num;
-                }
+            sum += *num;
+            if sl.2 == '*' {
+                adj_count += 1;
+                prod *= *num;
             }
         }
 
