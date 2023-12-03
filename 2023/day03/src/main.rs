@@ -51,60 +51,31 @@ fn solve() -> Result<(), Box<dyn std::error::Error>> {
         let mut same: Vec<u32> = vec![];
         let mut prod: u32 = 1;
         let mut adj_count: u8 = 0;
+
         // above
-        if let Some(num) = num_hash.get(&(sl.0 - 1, sl.1)) {
-            above.push(*num);
-            sum += *num;
-            if sl.2 == '*' {
-                adj_count += 1;
-                prod *= *num;
-            }
-        }
-        if let Some(num) = num_hash.get(&(sl.0 - 1, sl.1 - 1)) {
-            if !above.contains(&num) {
-                above.push(*num);
-                sum += *num;
-                if sl.2 == '*' {
-                    adj_count += 1;
-                    prod *= *num;
-                }
-            }
-        }
-        if let Some(num) = num_hash.get(&(sl.0 - 1, sl.1 + 1)) {
-            if !above.contains(&num) {
-                sum += *num;
-                if sl.2 == '*' {
-                    adj_count += 1;
-                    prod *= *num;
+        for c in -1..2 {
+            if let Some(num) = num_hash.get(&(sl.0 - 1, sl.1 + c)) {
+                if !above.contains(&num) {
+                    above.push(*num);
+                    sum += *num;
+                    if sl.2 == '*' {
+                        adj_count += 1;
+                        prod *= *num;
+                    }
                 }
             }
         }
 
         // below
-        if let Some(num) = num_hash.get(&(sl.0 + 1, sl.1)) {
-            below.push(*num);
-            sum += *num;
-            if sl.2 == '*' {
-                adj_count += 1;
-                prod *= *num;
-            }
-        }
-        if let Some(num) = num_hash.get(&(sl.0 + 1, sl.1 - 1)) {
-            if !below.contains(&num) {
-                below.push(*num);
-                sum += *num;
-                if sl.2 == '*' {
-                    adj_count += 1;
-                    prod *= *num;
-                }
-            }
-        }
-        if let Some(num) = num_hash.get(&(sl.0 + 1, sl.1 + 1)) {
-            if !below.contains(&num) {
-                sum += *num;
-                if sl.2 == '*' {
-                    adj_count += 1;
-                    prod *= *num;
+        for c in -1..2 {
+            if let Some(num) = num_hash.get(&(sl.0 + 1, sl.1 + c)) {
+                if !below.contains(&num) {
+                    below.push(*num);
+                    sum += *num;
+                    if sl.2 == '*' {
+                        adj_count += 1;
+                        prod *= *num;
+                    }
                 }
             }
         }
