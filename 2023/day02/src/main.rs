@@ -18,7 +18,6 @@ struct Pull {
 /// field 0 if value nto pulled
 fn get_max_pull(line: String) -> Pull {
     let subsets: Vec<&str> = line.split(";").map(|e| e.trim()).collect();
-    // [ [COUNT, COLOR_NAME] ]
     let pulls: Vec<(u8, &str)> = subsets
         .into_iter()
         .flat_map(|c| {
